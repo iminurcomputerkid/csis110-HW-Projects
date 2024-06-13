@@ -1,0 +1,41 @@
+from math import pi
+from JES import *
+
+
+#9/26/23, Homework 1b Image Sequence 
+#This program will take an image of a beach and run it through a function that will decrease the blue value by half, decrease red and increase green. After it will take all the images and display them in a slideshow with 3 seconds in between each image. 
+
+#Page 88 in Python variation
+#This function decreases blue pixels by half
+def decreaseBlue (myPic):
+  for p in getPixels(myPic):
+   value=getBlue(p)
+   setBlue(p, value*.5)
+#Lab 2 ClearRed Function Variation 
+#This function sets the red pixels to 50
+def decRed (myPic):
+  for px in getPixels(myPic):
+    setRed(px, 50)
+
+#This function increases the green in the picture
+def increaseGreen (myPic):
+  for pix in getPixels(myPic):
+    setGreen(pix, 160)
+#This function creates a slideshow of the picture of the beach manipulated through the functions above. 
+def createSequence():
+ myPic = makePicture( "beach.jpg" )
+ writePictureTo( myPic, "slide01.jpg")
+ decreaseBlue(myPic)
+ writePictureTo( myPic, "slide02.jpg")
+ decRed(myPic)
+ writePictureTo( myPic, "slide03.jpg")
+ increaseGreen(myPic)
+ writePictureTo( myPic, "slide04.jpg")
+  
+ writeSlideShowTo( "myShow.gif" , 3)
+
+#Prints the width of the image in pixels
+ width = getWidth(myPic)
+ print("this image is ", width, " pixels wide" )
+ 
+createSequence()

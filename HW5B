@@ -1,0 +1,67 @@
+from math import *
+from re import X
+from JES import *
+
+# CSIS110, HW5B, Python portion (Animation), Fall 2023. Julien Niles, 12/10/23 
+
+#This program takes an image of a boxing ring with a referee and two shapes (one oval and a rectangle) as the boxers. Once they collide, the ref runs towards them to breakup the fight and red text shows up saying red was knocked out.
+
+#Creates animation using ring jpg as the background image
+def createAnimation( ):
+  for num in range(0, 175):
+    canvas = makePicture("ring.jpg")
+    Referee = makePicture("ref.jpg")
+
+    #at every frame before 113, the boxers are moving closer to one another and the ref is standing still
+    if (num <= 113):
+      print("Generating frame: "+ str(num))
+      addOvalFilled(canvas, 83+num*1, 166, 50, 75, blue)
+      addRectFilled(canvas, 350-num*1, 180, 50, 75, red)
+      #addOvalFilled(canvas, 350-num*1, 180, 50, 75, red)
+      copy(Referee, canvas, 200, 50)
+
+    #starting at frame 114 the ref will run towards them and red text saying red was knocked out will appear
+    if(num > 113):
+      addOvalFilled(canvas, 83+113*1, 166, 50, 75, blue)
+      addRectFilled(canvas, 350-113*1, 180, 50, 75, red)
+
+      #addOvalFilled(canvas, 350-113*1, 180, 50, 75, red)
+      copy(Referee, canvas, 200+(num-113), 50+(num-113)*1)
+      addText(canvas, 35+((num-114)*2), 45, "Red has been knocked out!!!", 1/12*num, red)
+   
+  
+    writeFrame(num, "frames", canvas)
+
+  movie = makeMovieFromInitialFile("frames\\frame000.jpg");
+  writeAnimatedGif(movie, "myAnimation.gif")
+
+#copies ref picture object onto canvas
+def copy(Referee, newPic, x, y):
+  for p in getPixels(Referee):
+    x1 = getX(p)
+    y1 = getY(p)
+    if (x1+x < getWidth(newPic) and y1+y < getHeight(newPic)):
+      newP = getPixel(newPic, x1+x, y1+y)
+      setColor(newP, getColor(p))
+      
+
+# Don't modify this function.
+# This is program 175 in Python textbook. It writes pict to
+# the indicated folder using file name frameXXX.jpg, where
+# XXX is num padded with leading zeros if num less than 3 digits.
+def writeFrame(num, folder, pict):
+  # Have to deal with single digit vs. double digit 
+  numStr=str(num)
+  if num < 10:
+    writePictureTo(pict,folder+"/frame00"+numStr+".jpg")
+  if num >= 10 and num<100:
+    writePictureTo(pict,folder+"/frame0"+numStr+".jpg")
+  if num >= 100:
+    writePictureTo(pict,folder+"/frame"+numStr+".jpg")
+  
+
+# functions above
+###########################################
+# test code below
+  
+createAnimation()

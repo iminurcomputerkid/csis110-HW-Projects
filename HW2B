@@ -1,0 +1,83 @@
+from JES import *
+
+# CSIS110, HW2B, Python portion (graffiti function), Spring 2023. 
+# Written by Julien Niles 10/24/23
+#The program takes an image and changes the white of eye to green, sets the hair color to yellow and the teeth to black. 
+
+# Turns the teeth black 
+def teethBlack(facePic):
+  pink = makeColor(185, 150, 144)
+  for facex in range (200, 300):
+    for facey in range (160, 180):
+      px = getPixel (facePic, facex, facey)
+      color = getColor (px)
+      if (distance (color, white) < 100):
+        setColor(px, black)
+      if (distance (color, pink) < 40) and facex <= 271:
+        setColor(px, black)
+#makes the black box for the text
+def tBox(facePic):
+  for facex in range (0,100):
+    for facey in range (0, 100):
+      px = getPixel (facePic, facex, facey)
+      setColor(px, black)
+      
+
+
+
+#Sets the white of left eye to green
+def lefteyeG(facePic):
+  for facex in range (182, 214):
+    for facey in range (69, 80):
+      px = getPixel (facePic, facex, facey)
+      color = getColor (px)
+      if (distance (color, white) < 125):
+        setColor (px, green)
+#Sets white of right eye to green
+def righteyeG(facePic):
+  for facex in range (258, 300):
+    for facey in range (70, 85): 
+      px = getPixel (facePic, facex, facey)
+      color = getColor (px)
+      if (distance(color, white) < 90):
+        setColor (px, green)
+      if 286 <= facex <= 300 and 72 <= facey <= 85:
+        if (distance (color, gray) < 100):
+          setColor (px, green)
+      
+
+# Turn hair yellow
+def hairYellow(facePic):
+  for facex in range (0, getWidth(facePic)):
+    for facey in range (0, getHeight(facePic)):
+      px = getPixel (facePic, facex, facey)
+      color = getColor (px)
+      hair = False
+      if 0 <= facey <= 137 and 103 <= facex <= 181:
+        hair = True
+      if 167 <= facex <= 317 and 43 <= facey <= 98:
+        hair = False
+      if 0 <= facey <= 135 and 295 <= facex <= 385:
+          hair = True
+      if 167 <= facex <= 317 and 43 <= facey <= 98:
+          hair = False
+      if hair == True:
+        if (distance (color, black) < 125):
+          setColor (px, yellow)
+#calls for everything  (sets both eyes green, teeth black and hair yellow)     
+def graffiti():
+    myPic = makePicture ("smile.jpg")
+    lefteyeG(myPic)
+    righteyeG(myPic)
+    hairYellow(myPic)
+    teethBlack(myPic)
+    tBox(myPic)
+    addText(myPic, 5, 20, "Yea", 14, red)
+    addText(myPic, 5, 50, "we love", 12, green)
+    addText(myPic, 5, 70, "professor goldstein", 10, green)
+    writePictureTo(myPic,"graffiti.jpg")
+
+
+graffiti()
+
+

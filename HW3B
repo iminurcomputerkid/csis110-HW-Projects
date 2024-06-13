@@ -1,0 +1,94 @@
+from ctypes import DEFAULT_MODE
+from JES import *
+from random import *
+
+# CSIS110, HW3B, Python portion (soundCollage function), Fall 2023. 
+# Author: Ira Goldstein, 
+# Programmer: Julien Niles 11/12/23
+# Purpose: To create a sound collage of images.
+# PARTIAL PROGRAM ONLY.
+# TEMPLATE - Be sure to include appropriate comments.
+# your name, general comments, and description of each
+# segment and extra creativity  here
+
+# Read the Google Doc for detailed instructions
+
+# alteration functions you need go here...
+
+# Takes a sound object as input and returns a sound object
+# of the same length that has been reversed 
+
+#reverses the sound
+def makeReversedSound(sound):
+    reverseSnd = makeEmptySound( getLength(sound))
+    sourceIndex = getLength(sound) - 1
+    for reverseSndIndex in range (0, getLength(reverseSnd)):
+        sourceValue = getSampleValueAt( sound, sourceIndex)
+        setSampleValueAt (reverseSnd, reverseSndIndex, sourceValue)
+        sourceIndex = sourceIndex - 1
+    return reverseSnd
+  
+#doubles the frequency of the sound
+def makeDoubleFreq(sound):
+  lenDoubleFreq = getLength(sound)//2
+  doubleFreq = makeEmptySound(lenDoubleFreq)
+  for k in range(0, lenDoubleFreq): 
+    val = getSampleValueAt(sound, 2*k)
+    setSampleValueAt(doubleFreq, k, val)
+  return doubleFreq
+#increases volume of sound
+def increaseVolume(sound):
+  lenIncreaseVolume = makeEmptySound(getLength(sound))
+  for sample in range (0, getLength(sound)): 
+    value = getSampleValueAt(sound, sample)
+    vol = sample * (4 / getLength(sound))
+    setSampleValueAt(lenIncreaseVolume, sample, value * vol)
+  return lenIncreaseVolume
+
+# Function that handles file input and output and calls all of the 
+# necessary other functions.
+def soundCollage():
+  # ---- SECTION 1 ----
+  #____________________
+  # read in original sounds from files (use your own filenames)
+    s1 = makeSound("laughter.wav")
+    s2 = makeSound("bruh.wav")
+    s3 = makeReversedSound(s1)
+    s4 = makeDoubleFreq(s1)
+    s5 = increaseVolume(s2)
+
+  # ---- SECTION 2 ----
+  #____________________
+  # Call each of the alterations
+   # rev = makeReversedSound(s2)
+   # doubleFreq = makeDoubleFreq(s1)
+
+      #creates the empty sound
+    canvasLen = getLength(s1) + 11025+ getLength(s2) + 11025+ getLength(s3) + 11025+       getLength(s4) + 11025+ getLength(s5) + 11025  
+    canvas = makeEmptySound(canvasLen)  
+
+  # ---- SECTION 4 ----
+  #____________________
+  # The code below copies in the two original files with  
+  # silence between them and writes it to "collage.wav"
+    copy(s1, canvas, 0)
+    copy(s2, canvas, 11025 + getLength(s1))
+    copy(s3, canvas, 2 * (11025+ getLength(s2)))
+    copy(s4, canvas, 3 * (11025+ getLength(s3)))
+    copy(s5, canvas, 4 * (11025+ getLength(s4)))
+    writeSoundTo(canvas, "collage.wav")
+
+  # Here is where you would put in the code to put in the
+  # ---- SECTION 5 ----
+  #____________________
+  #copy in three alterations, with silence between them
+  #write out the final sound
+
+# functions above
+###########################################
+# test code below
+
+# ---- SECTION 6 ----
+#____________________
+#You should not need to modify this :)
+soundCollage()
